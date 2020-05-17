@@ -8,17 +8,20 @@ import {
   Body,
 } from '@nestjs/common';
 import { CreateTripDto } from './dto/create_trip.dto';
+import { TripsService } from './trips.service';
+import { Trip } from './interfaces/trip.interface';
 
 @Controller('trips')
 export class TripsController {
+  constructor(private tripsService: TripsService) {}
   @Post()
-  async createTrip(@Body() createTripDto: CreateTripDto): Promise<string> {
-    return 'trip was created';
+  async createTrip(@Body() createTripDto: CreateTripDto): Promise<Trip> {
+    return this.tripsService.create(createTripDto);
   }
 
   @Get()
-  getAllTrips(): string {
-    return 'all trips';
+  async getAllTrips(): Promise<Trip[]> {
+    return this.tripsService.findAll();
   }
 
   @Get('/:id')
